@@ -36,6 +36,7 @@ class editClient extends Component {
 
   render() {
     const { client } = this.props;
+    const { disableBalanceOnEdit } = this.props.settings;
 
     
     if (client) {
@@ -111,6 +112,7 @@ class editClient extends Component {
                     name="balance"
                     defaultValue={client.balance}
                     ref={this.balanceInput}
+                    disabled = {disableBalanceOnEdit}
                   />
                 </div>
                 <input type="submit" value="Submit" className="btn btn-primary btn-block" />
@@ -137,7 +139,8 @@ export default compose(
   firestoreConnect(props => [
     { collection: 'clients', storeAs: 'client', doc: props.match.params.id }
   ]),
-  connect(({ firestore: { ordered } }, props) => ({
-    client: ordered.client && ordered.client[0]
+  connect(({ firestore: { ordered }, settings }, props) => ({
+    client: ordered.client && ordered.client[0],
+    settings: settings
   }))
 )(editClient);

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
-// import { compose } from 'redux';
-// import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 
 function AddClient(props) {
+
+  const { disableBalanceOnAdd } = props.settings;
+
   const [inputClient, setInputClient] = useState({
     firstName: '',
     lastName: '',
@@ -117,6 +120,7 @@ function AddClient(props) {
                 name="balance"
                 value={inputClient.balance}
                 onChange={(e) => onChange(e)}
+                disabled = {disableBalanceOnAdd}
               />
             </div>
                 <input type="submit" value="Submit" className="btn btn-primary btn-block"/>
@@ -129,7 +133,13 @@ function AddClient(props) {
 
 
 AddClient.propTypes = {
-  firestore: PropTypes.object.isRequired
+  firestore: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired
 }
 
-export default firestoreConnect()(AddClient);
+export default compose(
+  firestoreConnect(),
+  connect((state, props) => ({
+    settings: state.settings
+  }))
+)(AddClient);
