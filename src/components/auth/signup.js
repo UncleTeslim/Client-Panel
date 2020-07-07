@@ -56,7 +56,7 @@ const Signup = (props) => {
       var errorMessage = error.message;
       
       if (errorCode === 'auth/email-already-in-use') {
-        notifyUser('User Already Exists');
+        notifyUser('User Already Exists', 'error');
       } else {
         notifyUser(errorMessage, 'error');
       }

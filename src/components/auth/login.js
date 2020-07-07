@@ -34,14 +34,26 @@ const Login = (props) => {
     // }).catch(err => alert('Invalid Login Details!'))
 
     
-    firebase
-      .auth().signInWithEmailAndPassword(
-        email,
-        password
-    ).catch(err => notifyUser('Invalid Login Details!', 'error'));
+    // firebase
+    //   .auth().signInWithEmailAndPassword(
+    //     email,
+    //     password
+    // ).catch(err => notifyUser('Invalid Login Details!', 'error'));
+
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          notifyUser('Wrong password.', 'error');
+        } else {
+          notifyUser(errorMessage, 'error');
+        }
     
-    
-  };
+      }
+    )}
 
   const { message, messageType } = props.notify;
 
