@@ -12,7 +12,6 @@ const Signup = (props) => {
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
-
   });
 
   useEffect(() => {
@@ -42,13 +41,26 @@ const Signup = (props) => {
     // }).catch(err => alert('Invalid Login Details!'))
 
 
-    firebase
-      .createUser({
-        email,
-        password
-      })
-      .catch(err => notifyUser('User Already Exists!', 'error'));
+    // firebase
+    //   .createUser({
+    //     email,
+    //     password
+    //   })
+    //   .catch(err => notifyUser('User Already Exists!', 'error'));
 
+
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      
+      if (errorCode === 'auth/email-already-in-use') {
+        notifyUser('User Already Exists');
+      } else {
+        notifyUser(errorMessage, 'error');
+      }
+    });
 
   };
 
